@@ -1,15 +1,22 @@
 // sportdata.io key
 let sportDataApiKey = "?key=acf8068f55284fd4afd0b96f698b5b32"; 
+let week            = "/8";
 
 
 // array
-let sbOddsArr = [];
-let afcOddsArr = [];
-let nfcOddsArr = [];
+let sbOddsArr          = [];
+let afcOddsArr         = [];
+let nfcOddsArr         = [];
+let completedGamesArr  = [];
+let inProgressGamesArr = [];
+let scheduledGamesArr  = [];
+
 
 
 
 // sportsdata.io ajax calls 
+// ======================================================================================================================================================== 
+
   // afc futures odds call
 const afcOdds = async () => {
   let resultArr;
@@ -20,7 +27,7 @@ const afcOdds = async () => {
       });
       return resultArr[0].BettingMarkets.filter(market => market.BettingBetType === "AFC Champion");
   } catch (err) {
-    console.log(error);
+    console.log(err);
   }
 
 };
@@ -34,7 +41,7 @@ const nfcOdds = async () => {
       });
       return resultArr[0].BettingMarkets.filter(market => market.BettingBetType === "NFC Champion");
   } catch (err) {
-    console.log(error);
+    console.log(err);
   }
 
 };
@@ -49,10 +56,45 @@ const sbOdds = async () => {
       });
       return resultArr[0].BettingMarkets.filter(market => market.BettingBetType === "NFL Championship Winner");
   } catch (err) {
-    console.log(error);
+    console.log(err);
   }
 
 };
+
+// ========================================================================================================================================================
+  
+// sb futures odds call
+
+const getCompletedGames = async () => {
+  let resultArr;
+  try {
+    resultArr = await $.ajax({
+        "url": "https://api.sportsdata.io/v3/nfl/scores/json/ScoresByWeek/" + "2020" + week + sportDataApiKey,
+        "method": "GET"
+      });
+      return resultArr;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// ========================================================================================================================================================
+
+const getScheduledGames = async () => {
+  let resultArr;
+  try {
+    resultArr = await $.ajax({
+        "url": "https://api.sportsdata.io/v3/nfl/scores/json/ScoresByWeek/" + "2020" + week + sportDataApiKey,
+        "method": "GET"
+      });
+      return resultArr;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// ========================================================================================================================================================
+
 
 $(document).ready(function() {
   afcOdds().then(dataArr => {
@@ -91,28 +133,25 @@ $(document).ready(function() {
   console.log(nfcOddsArr);
   console.log(sbOddsArr);
 
-
-
-
-
-
-
-
+  getCompletedGames().then(dataArr => {
+    dataArr.forEach(completedGameEl => {
+      completedGamesArr.push({
+        gameKey:               completedGameEl.GameKey,
+        scoreID:               completedGameEl.ScoreID,
+        homeTeam:              completedGameEl.HomeTeam,
+        awayTeam:              completedGameEl.AwayTeam,
+        homeScore:             completedGameEl.HomeScore,
+        awayScore:             completedGameEl.AwayScore,
+        channel:               completedGameEl.Channel,
+        forecastLow:           completedGameEl.ForecastTempLow,
+        forecastHigh:          completedGameEl.ForecastTempHigh,
+        forecastDesc:          completedGameEl.ForecastDescription,
+        stadiumName:           completedGameEl.StadiumDetails.Name,
+        stadiumCity:           completedGameEl.StadiumDetails.City,
+        stadiumState:          completedGameEl.StadiumDetails.State
+      });
+    });
+  });
+  console.log(completedGamesArr);
+  
 });
-
-
-// if (market.BettingBetType === "AFC Champion") {
-//   tempArr.push(market.BettingOutcomes);
-//   tempArr.filter(tempEl => {
-//     if (tempEl.Sportsbook.SportsbookID === 7) {
-//       afcOddsArr.push({
-//         teamName: tempEl.Participant,
-//         payout: tempEl.PayoutAmerican
-//       });
-//     }
-//   });
-// }
-// let AFCWinnerOddsArr   = bettingMarkets.filter(market => market.BettingBetType === "AFC Champion");
-// // array defined for all active NFL-AFC teams odds to win AFC Championship 
-// let AFCWinnerOddsArrDK = AFCWinnerOddsArr[0].BettingOutcomes.filter(sportsbook => sportsbook.SportsBook.SportsbookID === 7);
-// return AFCWinnerOddsArrDK;
