@@ -2,7 +2,7 @@ const axios = require('axios').default;
 
 let sportDataApiKey = "?key=acf8068f55284fd4afd0b96f698b5b32";
 
-const getSuperBowlOdds = async () => {
+const d = async () => {
     try {
       const resp = await axios.get("https://api.sportsdata.io/v3/nfl/odds/json/BettingFuturesBySeason/" + "2020" + sportDataApiKey);
       let data = resp.data[0];
@@ -18,6 +18,10 @@ const getSuperBowlOdds = async () => {
     }
 };
 
-getSuperBowlOdds();
-
-module.exports = getSuperBowlOdds();
+export const getSuperBowlOdds = () => {
+  $.ajax(
+  {
+    "url": "https://api.sportsdata.io/v3/nfl/odds/json/BettingFuturesBySeason/" + "2020" + sportDataApiKey,
+    "method": "GET"
+  });
+};
