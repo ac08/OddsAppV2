@@ -3,10 +3,6 @@ $(document).ready(function() {
 let sportDataApiKey         = "?key=38534c7cb0a84f93bd3f73dae90bf57d"; 
 
 // SportsData.io API - Endpoint URLs
-let gameDate                = moment().format("YYYY-MM-DD"); 
-let boxScoreDate            = moment().format("YYYY-MMM-DD");
-let LiveGameOddsDate        = moment().format("YYYY-MM-DD");
-let playerDate              = moment().format("YYYY-MMM-DD");
 
 let bettingFuturesMarketURL = "https://api.sportsdata.io/v3/mlb/odds/json/BettingFuturesBySeason/2020POST" + sportDataApiKey
 let gamesOddsByDateURL      = "https://api.sportsdata.io/v3/mlb/odds/json/GameOddsByDate/" + gameDate + sportDataApiKey;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OddsApp</title>
+    <title>Tracking Football Scores and Odds</title>
     <!-- External Stylesheets - CDN -->
     <link 
         rel="stylesheet" 
@@ -29,26 +29,26 @@
 <body>
     <header class="container" role="header">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <img class="mx-auto" src="assets/icons/mlb.png" width="50" heigh="60"></img>
+            <img class="mx-auto" src="" width="50" heigh="60"></img>
         </nav>
     </header>
     <div class="container">
         <div id="futuresMarket" class="container-fluid mb-1">
             <div class="row justify-content-center mb-2">
-                <button id="WorldSeriesBtn" class="btn btn-outline-dark btn-sm col-sm-3" type="button" data-toggle="collapse" data-target="#worldSeriesWinnerOdds" aria-expanded="false" aria-controls="collapse">
-                World Series
+                <button id="SuperBowlWinnerBtn" class="btn btn-outline-dark btn-sm col-sm-3" type="button" data-toggle="collapse" data-target="#SuperBowlWinnerOdds" aria-expanded="false" aria-controls="collapse">
+                Super Bowl
                 </button>
-                <button id="ALWinnerBtn" class="btn btn-outline-dark btn-sm col-sm-3  mx-0 mx-sm-1 my-1 my-sm-0" type="button" data-toggle="collapse" data-target="#ALWinnerOdds" aria-expanded="false" aria-controls="collapse">
-                American League
+                <button id="AFCWinnerBtn" class="btn btn-outline-dark btn-sm col-sm-3  mx-0 mx-sm-1 my-1 my-sm-0" type="button" data-toggle="collapse" data-target="#AFCWinnerOdds" aria-expanded="false" aria-controls="collapse">
+                American Football Conference
                 </button> 
-                <button id="NLWinnerBtn" class="btn btn-outline-dark btn-sm col-sm-3" type="button" data-toggle="collapse" data-target="#NLWinnerOdds" aria-expanded="false" aria-controls="collapse">
-                National League
+                <button id="NFCWinnerBtn" class="btn btn-outline-dark btn-sm col-sm-3" type="button" data-toggle="collapse" data-target="#NFCWinnerOdds" aria-expanded="false" aria-controls="collapse">
+                National Football Conference
                 </button>
             </div>
             <div class="row mb-1">
-                <div id="worldSeriesWinnerOdds" class="collapse col-12 text-center border mt-4"></div>
-                <div id="ALWinnerOdds" class="collapse col-12 text-center border"></div>
-                <div id="NLWinnerOdds" class="collapse col-12 text-center border"></div>
+                <div id="SuperBowlWinnerOdds" class="collapse col-12 text-center border mt-4"></div>
+                <div id="AFCWinnerOdds" class="collapse col-12 text-center border"></div>
+                <div id="NFCWinnerOdds" class="collapse col-12 text-center border"></div>
             </div>
         </div>
 
@@ -235,7 +235,7 @@
     </script>
     <!-- moment.js library added for date conversions -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js" integrity="sha512-Izh34nqeeR7/nwthfeE0SI3c8uhFSnqxV0sI9TvTcXiFJkMd6fB644O64BRq2P/LA/+7eRvCw4GmLsXksyTHBg==" crossorigin="anonymous"></script>
-    <script src="assets/logic.js"></script>
+    <script src="/assets/logicNFL.js"></script>
    
 
 
