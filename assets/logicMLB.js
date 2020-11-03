@@ -32,8 +32,8 @@ let NLWinnerArr        = [];
             if (bettingMarketEl.BettingBetType) {
                 if (bettingMarketEl.BettingBetType === "World Series Winner") {
                     WSBettingMarketArr.push(bettingMarketEl);
-                };
-            } else return
+                }
+            } else return;
         });
 
         // Configure Array for World Series Odds at DraftKings sportsbook (Id=7)

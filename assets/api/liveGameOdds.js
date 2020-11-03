@@ -23,8 +23,7 @@ getInProgressGames()
 let inProgressArr = [];
 
 dataArr.forEach(gameEl => {
-  // push method or create new object using the Class structure
-  inProgressArr.push({
+=  inProgressArr.push({
     scoreID:               gameEl.ScoreId,
     homeTeam:              gameEl.HomeTeamName,
     awayTeam:              gameEl.AwayTeamName,
