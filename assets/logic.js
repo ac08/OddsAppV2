@@ -1,3 +1,5 @@
+console.log("FILE LOAD");
+// MAYBE TRY TO WRITE THE ARRAYS LOCALLY TO A FILE THEN RENDER FROM THAT
 // sportdata.io key
 let sportDataApiKey = "?key=acf8068f55284fd4afd0b96f698b5b32"; 
 let week            = "/8";
@@ -11,8 +13,6 @@ let completedGamesArr  = [];
 let inProgressGamesArr = [];
 let scheduledGamesArr  = [];
 let newsArr            = [];
-
-
 
 
 // sportsdata.io ajax calls 
@@ -176,6 +176,26 @@ $(document).ready(function() {
         });
       }
     });
+    // generate afc odds
+    afcOddsArr.forEach((afcOddsEl) => {
+    let teamName   = afcOddsEl.teamName;
+    let afcOdds    = afcOddsEl.payout;
+    let listGroup = $("#AFCWinnerOdds");
+    // create list-item for teamName
+    let listItem  = $("<p>");
+    // add classes to list-item
+    listItem.addClass("list-group-item d-flex justify-content-between align-items-center");
+    // set text of list-item to teamName
+    listItem.text(teamName);
+    // create list-item-span for odds
+    let listItemSpan = $("<span>");
+    // add classes to list-item-spand
+    listItemSpan.addClass("badge badge-dark");
+    // set text of list-item-span to odds
+    listItemSpan.text(afcOdds); 
+    // append listItem to listGroup and listSpan to listItem
+    listGroup.append(listItem.append(listItemSpan));
+    });
   }); // end afcOdds handler
 
   nfcOdds().then(dataArr => {
@@ -187,6 +207,26 @@ $(document).ready(function() {
         });
       }
     });
+    // generate nfc odds
+    nfcOddsArr.forEach((nfcOddsEl) => {
+      let teamName   = nfcOddsEl.teamName;
+      let nfcOdds    = nfcOddsEl.payout;
+      let listGroup = $("#NFCWinnerOdds");
+      // create list-item for teamName
+      let listItem  = $("<p>");
+      // add classes to list-item
+      listItem.addClass("list-group-item d-flex justify-content-between align-items-center");
+      // set text of list-item to teamName
+      listItem.text(teamName);
+      // create list-item-span for odds
+      let listItemSpan = $("<span>");
+      // add classes to list-item-spand
+      listItemSpan.addClass("badge badge-dark");
+      // set text of list-item-span to odds
+      listItemSpan.text(nfcOdds); 
+      // append listItem to listGroup and listSpan to listItem
+      listGroup.append(listItem.append(listItemSpan));
+      });
   }); // end nfcOdds handler
 
   sbOdds().then(dataArr => {
@@ -198,11 +238,28 @@ $(document).ready(function() {
         });
       }
     });
+    // generate sb odds
+    sbOddsArr.forEach((sbOddsEl) => {
+      let teamName   = sbOddsEl.teamName;
+      let sbOdds     = sbOddsEl.payout;
+      let listGroup = $("#SuperBowlWinnerOdds");
+      // create list-item for teamName
+      let listItem  = $("<p>");
+      // add classes to list-item
+      listItem.addClass("list-group-item d-flex justify-content-between align-items-center");
+      // set text of list-item to teamName
+      listItem.text(teamName);
+      // create list-item-span for odds
+      let listItemSpan = $("<span>");
+      // add classes to list-item-spand
+      listItemSpan.addClass("badge badge-dark");
+      // set text of list-item-span to odds
+      listItemSpan.text(sbOdds); 
+      // append listItem to listGroup and listSpan to listItem
+      listGroup.append(listItem.append(listItemSpan));
+      });
   }); // end sbOdds handler
 
-  // console.log(afcOddsArr);
-  // console.log(nfcOddsArr);
-  // console.log(sbOddsArr);
 
   getCompletedGames().then(dataArr => {
     dataArr.forEach(completedGameEl => {
@@ -339,6 +396,7 @@ $(document).ready(function() {
         }
       });
     });
+
   });
   console.log(scheduledGamesArr);
   console.log(inProgressGamesArr);
@@ -346,64 +404,9 @@ $(document).ready(function() {
 
 // ========================================================================================================================================================
 
-function loadPreGameCards() {
-  scheduledGamesArr.forEach((gameEl) => {
-      let futuresMarketDiv  = $("#futuresMarket");
-      let preGameCard       = $("<div>");                                              // begin pre-game score card
-      preGameCard.addClass("container-fluid text-center card preGameCard mb-3");
-      preGameCard.attr("id", gameEl.gameID);
-      
-      
-      let preGameAwayRow    = $("<div>");                                              // begin pre-game away row
-      preGameAwayRow.addClass("row card-body");
-      preGameCard.append(preGameAwayRow);
-      let awayTeamLogo      = $("<img>")
-      awayTeamLogo.addClass("col-1 card-img");
-      awayTeamLogo.attr("src", gameEl.awayTeamLogo)
-                  .attr("id", "awayTeamLogoPre");
-      let awayTeamName      = $("<div>");
-      awayTeamName.addClass("col-4 font-weight-bold");
-      awayTeamName.text(gameEl.awayFullName);
+// ========================================================================================================================================================
 
-      let location          = $("<div>");
-      location.addClass("col-6");
-      location.text(gameEl.stadiumName + " - " + gameEl.stadiumCity + ", " + gameEl.stadiumState);
-      let channel           = $("<div>");
-
-      channel.addClass("col-1");
-      channel.text(gameEl.channel);
-      
-      preGameCard.insertAfter(futuresMarketDiv);
-      preGameAwayRow.append(awayTeamLogo, awayTeamName, location, channel);
-
-      
-      let preGameHomeRow    = $("<div>");                                                 // begin pre-game home row
-      preGameHomeRow.addClass("row card-body");
-      preGameCard.append(preGameHomeRow);
-      let homeTeamLogo      = $("<img>")
-      homeTeamLogo.addClass("col-1 card-img");
-      homeTeamLogo.attr("src", gameEl.homeTeamLogo)
-                  .attr("id", "homeTeamLogoPre");
-      let homeTeamName      = $("<div>");
-      homeTeamName.addClass("col-4 font-weight-bold");
-      homeTeamName.text(gameEl.homeFullName);
-      let gameTime          = $("<div>");
-      gameTime.addClass("col-6");
-      gameTime.text(moment(gameEl.dateTime).format('MMMM Do YYYY, h:mm a'));
-
-      let preGameBtn        = $("<i>");
-      preGameBtn.addClass("col-1 preGameModalBtn fas fa-football-ball my-auto")           // add preGameModalBtn class for on-click function
-                .attr("data-toggle", "modal")
-                .attr("data-target", "#pre-game-modal")
-                .attr("id", gameEl.gameID);
-      
-      preGameCard.insertAfter(futuresMarketDiv);
-      preGameHomeRow.append(homeTeamLogo, homeTeamName, gameTime, preGameBtn);
-
-
-  });
-}
-
-loadPreGameCards();
+// ========================================================================================================================================================
 
 }); // end document.ready() function
+
