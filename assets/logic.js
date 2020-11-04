@@ -20,13 +20,11 @@ let newsArr            = [];
 
   // afc futures odds call
 const afcOdds = async () => {
-  let resultArr;
   try {
-    resultArr = await $.ajax({
+    return $.ajax({
         "url": "http://api.sportsdata.io/v3/nfl/odds/json/BettingFuturesBySeason/" + "2020" + sportDataApiKey,
         "method": "GET"
       });
-      return resultArr[0].BettingMarkets.filter(market => market.BettingBetType === "AFC Champion");
   } catch (err) {
     console.log(err);
   }
@@ -166,37 +164,42 @@ const getInProgressGames = async () => {
 // ========================================================================================================================================================
 
 
-$(document).ready(function() {
-  afcOdds().then(dataArr => {
-    dataArr[0].BettingOutcomes.filter(sportsbook => {
-      if (sportsbook.SportsBook.SportsbookID === 7) {
-        afcOddsArr.push({
-          teamName: sportsbook.Participant,
-          payout: sportsbook.PayoutAmerican
-        });
-      }
-    });
-    // generate afc odds
-    afcOddsArr.forEach((afcOddsEl) => {
-    let teamName   = afcOddsEl.teamName;
-    let afcOdds    = afcOddsEl.payout;
-    let listGroup = $("#AFCWinnerOdds");
-    // create list-item for teamName
-    let listItem  = $("<p>");
-    // add classes to list-item
-    listItem.addClass("list-group-item d-flex justify-content-between align-items-center");
-    // set text of list-item to teamName
-    listItem.text(teamName);
-    // create list-item-span for odds
-    let listItemSpan = $("<span>");
-    // add classes to list-item-spand
-    listItemSpan.addClass("badge badge-dark");
-    // set text of list-item-span to odds
-    listItemSpan.text(afcOdds); 
-    // append listItem to listGroup and listSpan to listItem
-    listGroup.append(listItem.append(listItemSpan));
-    });
+$(document).ready(async () => {
+  let resArr  = await afcOdds();
+  let dataArr = resArr[0].BettingMarkets.filter(market => market.BettingBetType === "AFC Champion");
+  dataArr[0].BettingOutcomes.filter(sportsbook => {
+    if (sportsbook.SportsBook.SportsbookID === 7) {
+      afcOddsArr.push({
+        teamName: sportsbook.Participant,
+        payout: sportsbook.PayoutAmerican
+      });
+    }
+  });
+  // generate afc odds
+  afcOddsArr.forEach((afcOddsEl) => {
+  let teamName   = afcOddsEl.teamName;
+  let afcOdds    = afcOddsEl.payout;
+  let listGroup = $("#AFCWinnerOdds");
+  // create list-item for teamName
+  let listItem  = $("<p>");
+  // add classes to list-item
+  listItem.addClass("list-group-item d-flex justify-content-between align-items-center");
+  // set text of list-item to teamName
+  listItem.text(teamName);
+  // create list-item-span for odds
+  let listItemSpan = $("<span>");
+  // add classes to list-item-spand
+  listItemSpan.addClass("badge badge-dark");
+  // set text of list-item-span to odds
+  listItemSpan.text(afcOdds); 
+  // append listItem to listGroup and listSpan to listItem
+  listGroup.append(listItem.append(listItemSpan));
   }); // end afcOdds handler
+
+
+
+
+
 
   nfcOdds().then(dataArr => {
     dataArr[0].BettingOutcomes.filter(sportsbook => {
@@ -365,9 +368,40 @@ $(document).ready(function() {
           link:     dataArr[i].Url
         });
     }
+    // render news elements
+    newsArr.forEach((newsEl, i) => {
+      // generate ID to be used as a selector
+      let contentID  = "#" + "content-" + [i];
+      // select correct scrollspy item
+      let contentEl  = $(contentID);
+      // generate h5 tag
+      let headlineEl = $("<h5>");
+      // add classes to h5 tag
+      headlineEl.addClass("text-bold text-body mb-1");
+      // set h5 tag text to headline property in looping newsElement
+      headlineEl.text(newsEl.headline);
+      // insert h5 after contentEl 
+      headlineEl.insertAfter(contentEl);
+      // generate p tag
+      let storyEl    = $("<p>");
+      // set p tag text to story property in looping newsElement
+      storyEl.text(newsEl.story);
+      // insert p tag after headlineEl
+      storyEl.insertAfter(headlineEl);
+      // generate a tag
+      let buttonEl   = $("<a>");
+      // add classes to a tag
+      buttonEl.addClass("btn btn-outline-dark btn-sm mb-3");
+      // set a tag text 
+      buttonEl.text("Continue");
+      // set href attr of a tag to link property in looping newsElement
+      buttonEl.attr("href", newsEl.link);
+      // set role attr of a tag to "button" in looping newsElement
+      buttonEl.attr("role", "button");
+      // insert a tag after storyEl
+      buttonEl.insertAfter(storyEl);
+  });
   }); // end getNews handler
-
-  console.log(newsArr);
 
   getTeamDetails().then(dataArr => {
     dataArr.forEach(teamDetailEl => {
@@ -403,7 +437,57 @@ $(document).ready(function() {
   console.log(completedGamesArr);
 
 // ========================================================================================================================================================
+function loadCompleteGameCards() {
+  // completedGamesArr is empty does not exist
+  console.log(completedGamesArr);
+  completedGamesArr.forEach((gameEl) => {
+      let futuresMarketDiv     = $("#futuresMarket");
+      let completeGameCard     = $("<div>");
+      completeGameCard.addClass("container-fluid text-center card my-3 border completeGameCard");
+      completeGameCard.attr("id", gameEl.scoreID);
+      completeGameCard.insertAfter(futuresMarketDiv);
 
+      let completeGameAwayRow  = $("<div>");
+      completeGameAwayRow.addClass("row card-body");
+      let awayTeamLogo         = $("<img>");
+      awayTeamLogo.addClass("col-1 card-img");
+      awayTeamLogo.attr("src", gameEl.awayTeamLogo)
+                  .attr("id", "awayTeamLogoComplete");
+      let awayTeamFullName         = $("<div>");
+      awayTeamFullName.addClass("col-4 font-weight-bold");
+      awayTeamFullName.text(gameEl.awayTeamFullName);
+      let awayScore          = $("<div>");
+      awayScore.addClass("col-2");
+      awayScore.text(gameEl.awayScore);
+      let awayHeadCoach         = $("<div>");
+      awayHeadCoach.addClass("col-5");
+      awayHeadCoach.attr("id", "awayHeadCoach");
+
+      completeGameCard.append(completeGameAwayRow.append(awayTeamLogo, awayTeamFullName, awayScore, awayHeadCoach));
+
+
+      let completeGameHomeRow = $("<div>");
+      completeGameHomeRow.addClass("row card-body");
+      let homeTeamLogo        = $("<img>");
+      homeTeamLogo.addClass("col-1 card-img");
+      homeTeamLogo.attr("src", gameEl.homeTeamLogo)
+                  .attr("id", "homeTeamLogoComplete");
+      let homeTeamFullName        = $("<div>");
+      homeTeamFullName.addClass("col-4 font-weight-bold");
+      homeTeamFullName.text(gameEl.homeTeamFullName);
+      let homeScore         = $("<div>");
+      homeScore.addClass("col-2");
+      homeScore.text(gameEl.homeScore);
+      let homeHeadCoach          = $("<div>");
+      homeHeadCoach.addClass("col-5");
+      homeHeadCoach.attr("id", "pitcherTwo");
+
+      completeGameCard.append(completeGameHomeRow.append(homeTeamLogo, homeTeamFullName, homeScore, homeHeadCoach));
+
+  });
+}
+
+loadCompleteGameCards();
 // ========================================================================================================================================================
 
 // ========================================================================================================================================================
