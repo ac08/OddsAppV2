@@ -281,12 +281,9 @@ $(document).ready(async () => {
   let scheduledGamesResDetailsArr  = await getScheduledGamesDetails();
   let scheduledGamesDataDetailsArr = scheduledGamesResDetailsArr.filter(gameEl => gameEl.Status === "Scheduled");
     scheduledGamesDataDetailsArr.forEach(preGameDetailsEl => {
-      console.log(scheduledGamesDataDetailsArr);
       let preGameDetailsScoreID = preGameDetailsEl.ScoreID;
       scheduledGamesArr.forEach(gameEl => {
         if (gameEl.scoreID === preGameDetailsScoreID) {
-          console.log('HERE');
-
             gameEl.channel       =  preGameDetailsEl.Channel,
             gameEl.forecastLow   =  preGameDetailsEl.ForecastTempLow,
             gameEl.forecastHigh  =  preGameDetailsEl.ForecastTempHigh,
@@ -469,6 +466,17 @@ loadPreGameCards();
 
 // ========================================================================================================================================================
 
+
+displayWinningCoaches = () => {
+  if (awayScore > homeScore) {
+      $("#awayHeadCoach").text(this.awayHeadCoach + " (W)");
+      $("#homeHeadCoach").text(this.awayHeadCoach + " (L)");
+  } else {
+      $("#awayHeadCoach").text(this.awayHeadCoach + " (L)");
+      $("#homeHeadCoach").text(this.awayHeadCoach + " (W)");
+  }
+};
+
 function loadCompleteGameCards() {
   completedGamesArr.forEach((gameEl) => {
       let futuresMarketDiv     = $("#futuresMarket");
@@ -510,14 +518,23 @@ function loadCompleteGameCards() {
       homeScore.text(gameEl.homeScore);
       let homeHeadCoach          = $("<div>");
       homeHeadCoach.addClass("col-5");
-      homeHeadCoach.attr("id", "pitcherTwo");
+      homeHeadCoach.attr("id", "homeHeadCoach");
 
       completeGameCard.append(completeGameHomeRow.append(homeTeamLogo, homeTeamFullName, homeScore, homeHeadCoach));
 
+      if (gameEl.awayScore > gameEl.homeScore) {
+        $("#awayHeadCoach").text(gameEl.awayHeadCoach + " (W)");
+        $("#homeHeadCoach").text(gameEl.homeHeadCoach + " (L)");
+      } else {
+      $("#awayHeadCoach").text(gameEl.awayHeadCoach + " (L)");
+      $("#homeHeadCoach").text(gameEl.homeHeadCoach + " (W)");
+    }
   });
 }
 
 loadCompleteGameCards();
+
+
 // ========================================================================================================================================================
 
 // ========================================================================================================================================================
