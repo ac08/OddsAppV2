@@ -10,7 +10,7 @@ let boxScoresByDateURL      = "https://api.sportsdata.io/v3/mlb/stats/json/BoxSc
 let playerStatsByDate       = "https://api.sportsdata.io/v3/mlb/stats/json/PlayerGameStatsByDate/" + playerDate + sportDataApiKey
 let stadiumURL              = "https://api.sportsdata.io/v3/mlb/scores/json/Stadiums" + sportDataApiKey;
 let liveGameOddsURL         = "https://api.sportsdata.io/v3/mlb/odds/json/LiveGameOddsByDate/" + LiveGameOddsDate + sportDataApiKey;
-let newsURL                 = "https://api.sportsdata.io/v3/mlb/scores/json/News" + sportDataApiKey;
+let newsURL                 = "https://api.sportsdata.io/v3/mlb/scores/json/News?key=38534c7cb0a84f93bd3f73dae90bf57d" + sportDataApiKey;
 
 let WSBettingMarketArr = [];
 let worldSeriesOddsArr = [];
@@ -44,7 +44,7 @@ let NLWinnerArr        = [];
             let sportsBook = tempEl.SportsBook;
             if (sportsBook.SportsbookID === 7) {
                 draftKingsWSOddsArr.push(tempEl);
-            };
+            }
         });
 
         // Loop through Array for Worlds Series Odds at DraftKings sportsbook and push teamName and odds to functional array
@@ -468,7 +468,7 @@ let NLWinnerArr        = [];
                                     gameEl.stadiumName  = stadiumEl.Name,
                                     gameEl.stadiumCity  = stadiumEl.City,
                                     gameEl.stadiumState = stadiumEl.State 
-                                };
+                                }
                             });
 
                             scheduledArr.forEach(function(gameEl) {

@@ -124,13 +124,12 @@ const getScheduledGamesDetails = () => {
   
 // getInProgressGames() call
 
-const getInProgressGames = async () => {
+const getInProgressGames = () => {
   try {
-    resultArr = await $.ajax({
+    return $.ajax({
         "url": "https://api.sportsdata.io/v3/nfl/odds/json/LiveGameOddsByWeek/" + "2020" + week + sportDataApiKey,
         "method": "GET"
       });
-      return resultArr.filter(gameEl => gameEl.Status === "InProgress");
   } catch (err) {
     console.log(err);
   }
@@ -280,39 +279,42 @@ $(document).ready(async () => {
 
   let scheduledGamesResDetailsArr  = await getScheduledGamesDetails();
   let scheduledGamesDataDetailsArr = scheduledGamesResDetailsArr.filter(gameEl => gameEl.Status === "Scheduled");
-    scheduledGamesDataDetailsArr.forEach(preGameDetailsEl => {
-      let preGameDetailsScoreID = preGameDetailsEl.ScoreID;
-      scheduledGamesArr.forEach(gameEl => {
-        if (gameEl.scoreID === preGameDetailsScoreID) {
-            gameEl.channel       =  preGameDetailsEl.Channel,
-            gameEl.forecastLow   =  preGameDetailsEl.ForecastTempLow,
-            gameEl.forecastHigh  =  preGameDetailsEl.ForecastTempHigh,
-            gameEl.forecastDesc  =  preGameDetailsEl.ForecastDescription,
-            gameEl.stadiumName   =  preGameDetailsEl.StadiumDetails.Name,
-            gameEl.stadiumCity   =  preGameDetailsEl.StadiumDetails.City,
-            gameEl.stadiumState  =  preGameDetailsEl.StadiumDetails.State;
-        }
-      });
-    }); // end getScheduledGamesDetails handler
+  scheduledGamesDataDetailsArr.forEach(preGameDetailsEl => {
+    let preGameDetailsScoreID = preGameDetailsEl.ScoreID;
+    scheduledGamesArr.forEach(gameEl => {
+      if (gameEl.scoreID === preGameDetailsScoreID) {
+          gameEl.channel       =  preGameDetailsEl.Channel,
+          gameEl.forecastLow   =  preGameDetailsEl.ForecastTempLow,
+          gameEl.forecastHigh  =  preGameDetailsEl.ForecastTempHigh,
+          gameEl.forecastDesc  =  preGameDetailsEl.ForecastDescription,
+          gameEl.stadiumName   =  preGameDetailsEl.StadiumDetails.Name,
+          gameEl.stadiumCity   =  preGameDetailsEl.StadiumDetails.City,
+          gameEl.stadiumState  =  preGameDetailsEl.StadiumDetails.State;
+      }
+    });
+  }); // end getScheduledGamesDetails handler
 
-  getInProgressGames().then(dataArr => {
-    dataArr.forEach(inProgressGameEl => {
-      inProgressGamesArr.push({
-        scoreID:               inProgressGameEl.ScoreId,
-        homeTeam:              inProgressGameEl.HomeTeamName,
-        homeTeamID:            inProgressGameEl.HomeTeamId,
-        awayTeam:              inProgressGameEl.AwayTeamName,
-        awayTeamID:            inProgressGameEl.AwayTeamId,
-        homeTeamML:            inProgressGameEl.LiveOdds[0].HomeMoneyLine,
-        awayTeamML:            inProgressGameEl.LiveOdds[0].AwayMoneyLine,
-        homePointSpread:       inProgressGameEl.LiveOdds[0].HomePointSpread,
-        awayPointSpread:       inProgressGameEl.LiveOdds[0].AwayPointSpread,
-        homePointSpreadPayout: inProgressGameEl.LiveOdds[0].HomePointSpreadPayout,
-        awayPointSpreadPayout: inProgressGameEl.LiveOdds[0].AwayPointSpreadPayout,
-        overUnderTotal:        inProgressGameEl.LiveOdds[0].OverUnder,
-        overPayout:            inProgressGameEl.LiveOdds[0].OverPayout,
-        underPayout:           inProgressGameEl.LiveOdds[0].UnderPayout    
-      });
+  let inProgressGamesResArr = await getInProgressGames();
+  let inProgressGamesDataArr = inProgressGamesResArr.filter(gameEl => gameEl.Status === "InProgress");
+  inProgressGamesDataArr.forEach(inProgressGameEl => {
+    inProgressGamesArr.push({
+      scoreID:               inProgressGameEl.ScoreId,
+      homeTeam:              inProgressGameEl.HomeTeamName,
+      homeTeamID:            inProgressGameEl.HomeTeamId,
+      // awayTeamScore: 
+      awayTeam:              inProgressGameEl.AwayTeamName,
+      awayTeamID:            inProgressGameEl.AwayTeamId,
+      // awayTeamScore: 
+      // quarter: 
+      homeTeamML:            inProgressGameEl.LiveOdds[0].HomeMoneyLine,
+      awayTeamML:            inProgressGameEl.LiveOdds[0].AwayMoneyLine,
+      homePointSpread:       inProgressGameEl.LiveOdds[0].HomePointSpread,
+      awayPointSpread:       inProgressGameEl.LiveOdds[0].AwayPointSpread,
+      homePointSpreadPayout: inProgressGameEl.LiveOdds[0].HomePointSpreadPayout,
+      awayPointSpreadPayout: inProgressGameEl.LiveOdds[0].AwayPointSpreadPayout,
+      overUnderTotal:        inProgressGameEl.LiveOdds[0].OverUnder,
+      overPayout:            inProgressGameEl.LiveOdds[0].OverPayout,
+      underPayout:           inProgressGameEl.LiveOdds[0].UnderPayout    
     });
   }); // end getInProgressGames handler
 
@@ -320,12 +322,12 @@ $(document).ready(async () => {
 
   // push news articles from last three days to newsArr
   for (i = 0; i < 3; i++) {
-      newsArr.push({
-        timeAgo:  newsDataArr[i].TimeAgo,
-        headline: newsDataArr[i].Title,
-        story:    newsDataArr[i].Content,
-        link:     newsDataArr[i].Url
-      });
+    newsArr.push({
+      timeAgo:  newsDataArr[i].TimeAgo,
+      headline: newsDataArr[i].Title,
+      story:    newsDataArr[i].Content,
+      link:     newsDataArr[i].Url
+    });
   }
   // render news elements
   newsArr.forEach((newsEl, i) => {
@@ -450,7 +452,7 @@ function loadPreGameCards() {
       gameTime.text(moment(gameEl.dateTime).format('MMMM Do YYYY, h:mm a'));
 
       let preGameBtn        = $("<i>");
-      preGameBtn.addClass("col-1 preGameModalBtn fas fa-baseball-ball my-auto")           // add preGameModalBtn class for on-click function
+      preGameBtn.addClass("col-1 preGameModalBtn fas fa-football-ball my-auto")           // add preGameModalBtn class for on-click function
                 .attr("data-toggle", "modal")
                 .attr("data-target", "#pre-game-modal")
                 .attr("id", gameEl.scoreID);
@@ -463,6 +465,139 @@ function loadPreGameCards() {
 }
 
 loadPreGameCards();
+
+$(".preGameModalBtn").on("click", function() {
+  let scoreID = $(this).attr("id");
+  scheduledGamesArr.forEach((gameEl) => {
+      if (parseInt(scoreID) === gameEl.scoreID) {
+          $("#homeTeamLogoPreModal").attr("src", gameEl.homeTeamLogo);
+          $("#homeTeamSpreadPre").text(gameEl.homePointSpread);
+          $("#homeTeamSpreadOddsPre").text(gameEl.homePointSpreadPayout);
+
+          $("#homeTeamMLPre").text(gameEl.homeTeamML);
+          $("#overTotalPre").text("O" + gameEl.overUnderTotal);
+          $("#overMLPre").text(gameEl.overPayout);
+
+          $("#awayTeamLogoPreModal").attr("src", gameEl.awayTeamLogo);
+          $("#awayTeamSpreadPre").text(gameEl.awayPointSpread);
+          $("#awayTeamSpreadOddsPre").text(gameEl.awayPointSpreadPayout);
+
+          $("#awayTeamMLPre").text(gameEl.awayTeamML);
+          $("#underTotalPre").text("U" + gameEl.overUnderTotal);
+          $("#underMLPre").text(gameEl.underPayout);
+          
+      } else return;
+  });
+});
+
+// ========================================================================================================================================================
+
+function loadLiveGameCards() {
+  inProgressGamesArr.forEach((gameEl) => {
+      let futuresMarketDiv   = $("#futuresMarket");
+      let liveGameCard       = $("<div>");                                            // begin live score card
+      liveGameCard.addClass("container-fluid text-center card liveGameCard mb-3");
+      liveGameCard.attr("id", gameEl.scoreID);
+      let liveGameHomeRow    = $("<div>");                                            // begin live home row
+      liveGameHomeRow.addClass("row card-body");
+      let liveHomeTeamLogo      = $("<img>");
+      liveHomeTeamLogo.addClass("col-1 card-img");
+      liveHomeTeamLogo.attr("src", gameEl.homeTeamLogo)
+                      .attr("id", "homeTeamLogoLive");
+      let homeTeamFullName      = $("<div>");
+      homeTeamFullName.addClass("col-4 font-weight-bold");
+      homeTeamFullName.text(gameEl.homeTeamFullName);
+
+      let liveInfoDivHome = $("<div>");
+      liveInfoDivHome.addClass("col-6");
+
+      let liveInfoCon = $("<div>");
+      liveInfoCon.addClass("container-fluid");
+      liveInfoDivHome.append(liveInfoCon);
+      let liveInfoRow = $("<div>");
+      liveInfoRow.addClass("row");
+      liveInfoCon.append(liveInfoRow);
+      let homeScore = $("<div>");
+      homeScore.addClass("col-4");
+      homeScore.text(gameEl.homeTeamRuns);
+      let quarter    = $("<div>");
+      quarter.addClass("col-8");
+      quarter.text(gameEl.inning);
+      liveInfoRow.append(homeScore, quarter);
+
+      let liveGameBtn = $("<i>");
+      liveGameBtn.addClass("col-1 liveGameModalBtn fas fa-football-ball my-auto")    // add liveGameModalBtn class for on-click function
+                  .attr("data-toggle", "modal") 
+                  .attr("data-target", "#live-game-modal")
+                  .attr("id", gameEl.scoreID);
+
+      liveGameCard.insertAfter(futuresMarketDiv);
+
+
+
+      let liveGameAwayRow    = $("<div>");                                          // begin live away row
+      liveGameAwayRow.addClass("row card-body");
+      let liveAwayTeamLogo      = $("<img>");
+      liveAwayTeamLogo.addClass("col-1 card-img");
+      liveAwayTeamLogo.attr("src", gameEl.awayTeamLogo)
+                  .attr("id", "awayTeamLogoLive");
+      let awayTeamFullName      = $("<div>");
+      awayTeamFullName.addClass("col-4 font-weight-bold");
+      awayTeamFullName.text(gameEl.awayTeamFullName);
+
+      let liveInfoDivAway = $("<div>");
+      liveInfoDivAway.addClass("col-6");
+      let liveInfoConAway = $("<div>");
+      liveInfoConAway.addClass("container-fluid");
+      let liveInfoRowAway = $("<div>");
+      liveInfoRowAway.addClass("row");
+
+      let awayScore = $("<div>");
+      awayScore.addClass("col-4");
+      awayScore.text(gameEl.awayScore);
+
+      let channel    = $("<div>");
+      channel.addClass("col-8");
+      channel.text(gameEl.channel);
+
+      let emptyDiv = $("<div>");
+      emptyDiv.addClass("col-1");
+
+      // render live score card html 
+      liveGameCard.append(liveGameAwayRow);
+      liveGameAwayRow.append(liveAwayTeamLogo, awayTeamFullName, liveInfoDivAway, emptyDiv);
+      liveInfoDivAway.append(liveInfoConAway);
+      liveInfoConAway.append(liveInfoRowAway);
+      liveInfoRowAway.append(awayScore,channel);
+
+      liveGameCard.append(liveGameHomeRow);
+      liveGameHomeRow.append(liveHomeTeamLogo, homeTeamFullName, liveInfoDivHome, liveGameBtn);
+
+  });
+}
+
+loadLiveGameCards();
+
+$(".liveGameModalBtn").on("click", function() {
+  let scoreID = $(this).attr("id");
+  inProgressGamesArr.forEach((gameEl) => {
+      if (parseInt(scoreID) === gameEl.scoreID) {
+          $("#homeTeamLogoLiveModal").attr("src", gameEl.homeTeamLogo);
+          $("#homeTeamSpreadLive").text(gameEl.homePointSpread);
+          $("#homeTeamSpreadOddsLive").text(gameEl.homePointSpreadPayout);
+          $("#homeTeamMLLive").text(gameEl.homeTeaML);
+
+          // no section for overUNderTotal and overPayout and underPayout
+
+          $("#awayTeamLogoLiveModal").attr("src", gameEl.awayTeamLogo);
+          $("#awayTeamSpreadLive").text(gameEl.awayPointSpread);
+          $("#awayTeamSpreadOddsLive").text(gameEl.awayPointSpreadPayout);
+          $("#awayTeamMLLive").text(gameEl.awayTeaML);
+          
+      } else return;
+  });
+});
+
 
 // ========================================================================================================================================================
 
