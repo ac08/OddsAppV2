@@ -418,58 +418,58 @@ $(document).ready(async () => {
 
 // ========================================================================================================================================================
 function loadPreGameCards() {
-  scheduledGamesArr.forEach((gameEl) => {
-      let futuresMarketDiv  = $("#futuresMarket");
-      let preGameCard       = $("<div>");                                              // begin pre-game score card
-      preGameCard.addClass("container-fluid text-center card preGameCard mb-3");
-      preGameCard.attr("id", gameEl.scoreID);
-      
-      
-      let preGameAwayRow    = $("<div>");                                              // begin pre-game away row
-      preGameAwayRow.addClass("row card-body");
-      preGameCard.append(preGameAwayRow);
-      let awayTeamLogo      = $("<img>")
-      awayTeamLogo.addClass("col-1 card-img");
-      awayTeamLogo.attr("src", gameEl.awayTeamLogo)
-                  .attr("id", "awayTeamLogoPre");
-      let awayTeamFullName      = $("<div>");
-      awayTeamFullName.addClass("col-4 font-weight-bold");
-      awayTeamFullName.text(gameEl.awayTeamFullName);
+scheduledGamesArr.forEach((gameEl) => {
+    let futuresMarketDiv  = $("#futuresMarket");
+    let preGameCard       = $("<div>");                                              // begin pre-game score card
+    preGameCard.addClass("container-fluid text-center card preGameCard mb-3");
+    preGameCard.attr("id", gameEl.scoreID);
+    
+    
+    let preGameAwayRow    = $("<div>");                                              // begin pre-game away row
+    preGameAwayRow.addClass("row card-body");
+    preGameCard.append(preGameAwayRow);
+    let awayTeamLogo      = $("<img>")
+    awayTeamLogo.addClass("col-1 card-img");
+    awayTeamLogo.attr("src", gameEl.awayTeamLogo)
+                .attr("id", "awayTeamLogoPre");
+    let awayTeamFullName      = $("<div>");
+    awayTeamFullName.addClass("col-4 font-weight-bold");
+    awayTeamFullName.text(gameEl.awayTeamFullName);
 
-      let location          = $("<div>");
-      location.addClass("col-6");
-      location.text(gameEl.stadiumName + " - " + gameEl.stadiumCity + ", " + gameEl.stadiumState);
-      let channel           = $("<div>");
+    let location          = $("<div>");
+    location.addClass("col-6");
+    location.text(gameEl.stadiumName + " - " + gameEl.stadiumCity + ", " + gameEl.stadiumState);
+    let channel           = $("<div>");
 
-      channel.addClass("col-1");
-      channel.text(gameEl.channel);
-      
-      preGameCard.insertAfter(futuresMarketDiv);
-      preGameAwayRow.append(awayTeamLogo, awayTeamFullName, location, channel);
+    channel.addClass("col-1");
+    channel.text(gameEl.channel);
+    
+    preGameCard.insertAfter(futuresMarketDiv);
+    preGameAwayRow.append(awayTeamLogo, awayTeamFullName, location, channel);
 
-      
-      let preGameHomeRow    = $("<div>");                                                 // begin pre-game home row
-      preGameHomeRow.addClass("row card-body");
-      preGameCard.append(preGameHomeRow);
-      let homeTeamLogo      = $("<img>")
-      homeTeamLogo.addClass("col-1 card-img");
-      homeTeamLogo.attr("src", gameEl.homeTeamLogo)
-                  .attr("id", "homeTeamLogoPre");
-      let homeTeamFullName      = $("<div>");
-      homeTeamFullName.addClass("col-4 font-weight-bold");
-      homeTeamFullName.text(gameEl.homeTeamFullName);
-      let gameTime          = $("<div>");
-      gameTime.addClass("col-6");
-      gameTime.text(moment(gameEl.dateTime).format('MMMM Do YYYY, h:mm a'));
+    
+    let preGameHomeRow    = $("<div>");                                                 // begin pre-game home row
+    preGameHomeRow.addClass("row card-body");
+    preGameCard.append(preGameHomeRow);
+    let homeTeamLogo      = $("<img>")
+    homeTeamLogo.addClass("col-1 card-img");
+    homeTeamLogo.attr("src", gameEl.homeTeamLogo)
+                .attr("id", "homeTeamLogoPre");
+    let homeTeamFullName      = $("<div>");
+    homeTeamFullName.addClass("col-4 font-weight-bold");
+    homeTeamFullName.text(gameEl.homeTeamFullName);
+    let gameTime          = $("<div>");
+    gameTime.addClass("col-6");
+    gameTime.text(moment(gameEl.dateTime).format('MMMM Do YYYY, h:mm a'));
 
-      let preGameBtn        = $("<i>");
-      preGameBtn.addClass("col-1 preGameModalBtn fas fa-football-ball my-auto")           // add preGameModalBtn class for on-click function
-                .attr("data-toggle", "modal")
-                .attr("data-target", "#pre-game-modal")
-                .attr("id", gameEl.scoreID);
-      
-      preGameCard.insertAfter(futuresMarketDiv);
-      preGameHomeRow.append(homeTeamLogo, homeTeamFullName, gameTime, preGameBtn);
+    let preGameBtn        = $("<i>");
+    preGameBtn.addClass("col-1 preGameModalBtn fas fa-football-ball my-auto")           // add preGameModalBtn class for on-click function
+              .attr("data-toggle", "modal")
+              .attr("data-target", "#pre-game-modal")
+              .attr("id", gameEl.scoreID);
+    
+    preGameCard.insertAfter(futuresMarketDiv);
+    preGameHomeRow.append(homeTeamLogo, homeTeamFullName, gameTime, preGameBtn);
   });
 }
 
@@ -541,8 +541,6 @@ function loadLiveGameCards() {
 
     liveGameCard.insertAfter(futuresMarketDiv);
 
-
-
     let liveGameAwayRow    = $("<div>");                                          // begin live away row
     liveGameAwayRow.addClass("row card-body");
     let liveAwayTeamLogo      = $("<img>");
@@ -594,7 +592,7 @@ $(".liveGameModalBtn").on("click", function() {
           $("#homeTeamSpreadOddsLive").text(gameEl.homePointSpreadPayout);
           $("#homeTeamMLLive").text(gameEl.homeTeaML);
 
-          // no section for overUNderTotal and overPayout and underPayout
+          // no section for overUNderTotal and overPayout and underPayout **************************
 
           $("#awayTeamLogoLiveModal").attr("src", gameEl.awayTeamLogo);
           $("#awayTeamSpreadLive").text(gameEl.awayPointSpread);
@@ -621,53 +619,53 @@ displayWinningCoaches = () => {
 
 function loadCompleteGameCards() {
   completedGamesArr.forEach((gameEl) => {
-      let futuresMarketDiv     = $("#futuresMarket");
-      let completeGameCard     = $("<div>");
-      completeGameCard.addClass("container-fluid text-center card my-3 border completeGameCard");
-      completeGameCard.attr("id", gameEl.scoreID);
-      completeGameCard.insertAfter(futuresMarketDiv);
+    let futuresMarketDiv     = $("#futuresMarket");
+    let completeGameCard     = $("<div>");
+    completeGameCard.addClass("container-fluid text-center card my-3 border completeGameCard");
+    completeGameCard.attr("id", gameEl.scoreID);
+    completeGameCard.insertAfter(futuresMarketDiv);
 
-      let completeGameAwayRow  = $("<div>");
-      completeGameAwayRow.addClass("row card-body");
-      let awayTeamLogo         = $("<img>");
-      awayTeamLogo.addClass("col-1 card-img");
-      awayTeamLogo.attr("src", gameEl.awayTeamLogo)
-                  .attr("id", "awayTeamLogoComplete");
-      let awayTeamFullName         = $("<div>");
-      awayTeamFullName.addClass("col-4 font-weight-bold");
-      awayTeamFullName.text(gameEl.awayTeamFullName);
-      let awayScore          = $("<div>");
-      awayScore.addClass("col-2");
-      awayScore.text(gameEl.awayScore);
-      let awayHeadCoach         = $("<div>");
-      awayHeadCoach.addClass("col-5");
-      awayHeadCoach.attr("id", "awayHeadCoach");
+    let completeGameAwayRow  = $("<div>");
+    completeGameAwayRow.addClass("row card-body");
+    let awayTeamLogo         = $("<img>");
+    awayTeamLogo.addClass("col-1 card-img");
+    awayTeamLogo.attr("src", gameEl.awayTeamLogo)
+                .attr("id", "awayTeamLogoComplete");
+    let awayTeamFullName         = $("<div>");
+    awayTeamFullName.addClass("col-4 font-weight-bold");
+    awayTeamFullName.text(gameEl.awayTeamFullName);
+    let awayScore          = $("<div>");
+    awayScore.addClass("col-2");
+    awayScore.text(gameEl.awayScore);
+    let awayHeadCoach         = $("<div>");
+    awayHeadCoach.addClass("col-5");
+    awayHeadCoach.attr("id", "awayHeadCoach");
 
-      completeGameCard.append(completeGameAwayRow.append(awayTeamLogo, awayTeamFullName, awayScore, awayHeadCoach));
+    completeGameCard.append(completeGameAwayRow.append(awayTeamLogo, awayTeamFullName, awayScore, awayHeadCoach));
 
 
-      let completeGameHomeRow = $("<div>");
-      completeGameHomeRow.addClass("row card-body");
-      let homeTeamLogo        = $("<img>");
-      homeTeamLogo.addClass("col-1 card-img");
-      homeTeamLogo.attr("src", gameEl.homeTeamLogo)
-                  .attr("id", "homeTeamLogoComplete");
-      let homeTeamFullName        = $("<div>");
-      homeTeamFullName.addClass("col-4 font-weight-bold");
-      homeTeamFullName.text(gameEl.homeTeamFullName);
-      let homeScore         = $("<div>");
-      homeScore.addClass("col-2");
-      homeScore.text(gameEl.homeScore);
-      let homeHeadCoach          = $("<div>");
-      homeHeadCoach.addClass("col-5");
-      homeHeadCoach.attr("id", "homeHeadCoach");
+    let completeGameHomeRow = $("<div>");
+    completeGameHomeRow.addClass("row card-body");
+    let homeTeamLogo        = $("<img>");
+    homeTeamLogo.addClass("col-1 card-img");
+    homeTeamLogo.attr("src", gameEl.homeTeamLogo)
+                .attr("id", "homeTeamLogoComplete");
+    let homeTeamFullName        = $("<div>");
+    homeTeamFullName.addClass("col-4 font-weight-bold");
+    homeTeamFullName.text(gameEl.homeTeamFullName);
+    let homeScore         = $("<div>");
+    homeScore.addClass("col-2");
+    homeScore.text(gameEl.homeScore);
+    let homeHeadCoach          = $("<div>");
+    homeHeadCoach.addClass("col-5");
+    homeHeadCoach.attr("id", "homeHeadCoach");
 
-      completeGameCard.append(completeGameHomeRow.append(homeTeamLogo, homeTeamFullName, homeScore, homeHeadCoach));
+    completeGameCard.append(completeGameHomeRow.append(homeTeamLogo, homeTeamFullName, homeScore, homeHeadCoach));
 
-      if (gameEl.awayScore > gameEl.homeScore) {
-        $("#awayHeadCoach").text(gameEl.awayHeadCoach + " (W)");
-        $("#homeHeadCoach").text(gameEl.homeHeadCoach + " (L)");
-      } else {
+    if (gameEl.awayScore > gameEl.homeScore) {
+      $("#awayHeadCoach").text(gameEl.awayHeadCoach + " (W)");
+      $("#homeHeadCoach").text(gameEl.homeHeadCoach + " (L)");
+    } else {
       $("#awayHeadCoach").text(gameEl.awayHeadCoach + " (L)");
       $("#homeHeadCoach").text(gameEl.homeHeadCoach + " (W)");
     }
@@ -675,9 +673,6 @@ function loadCompleteGameCards() {
 }
 
 loadCompleteGameCards();
-
-
-// ========================================================================================================================================================
 
 // ========================================================================================================================================================
 
