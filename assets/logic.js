@@ -1,6 +1,6 @@
 // sportdata.io key
 let sportDataApiKey = "?key=acf8068f55284fd4afd0b96f698b5b32"; 
-let week            = "/8";
+let week            = "/9";
 
 
 // array
@@ -232,7 +232,9 @@ $(document).ready(async () => {
     }); // end sbOdds handler
 
 
-  let completedGamesDataArr = await getCompletedGames();
+  let completedGamesResArr = await getCompletedGames();
+  let completedGamesDataArr = completedGamesResArr.filter(gameEl => gameEl.Status === "Final");
+  // ********************************************************************* need to add a section for status === completed game
   completedGamesDataArr.forEach(completedGameEl => {
     completedGamesArr.push({
       gameKey:               completedGameEl.GameKey,
@@ -293,6 +295,35 @@ $(document).ready(async () => {
     });
   }); // end getGameDetails for stadium and channel information for pre-games handler
 
+//  let inProgressGamesResArr  = await getGameDetails();
+//  let inProgressGamesDataArr = inProgressGamesResArr.filter(gameEl => gameEl.Status === "InProgress");
+//  console.log(inProgressGamesDataArr);
+//  inProgressGamesDataArr.forEach(inProgressGameEl => {
+//     inProgressGamesArr.push({
+//       homeTeamScore: inProgressGameEl.HomeScore,
+//       awayTeamScore: inProgressGameEl.AwayScore,
+//       scoreID:               inProgressGameEl.ScoreID,
+//       homeTeam:              inProgressGameEl.HomeTeam,
+//       homeTeamID:            inProgressGameEl.HomeTeamID,
+//       awayTeam:              inProgressGameEl.AwayTeam,
+//       awayTeamID:            inProgressGameEl.AwayTeamID,
+
+//       homeTeamML:            inProgressGameEl.HomeTeamMoneyLine,
+//       awayTeamML:            inProgressGameEl.AwayTeamMoneyLine,
+//       homePointSpread:       inProgressGameEl.LiveOdds[0].HomePointSpread,
+//       awayPointSpread:       inProgressGameEl.LiveOdds[0].AwayPointSpread,
+//       homePointSpreadPayout: inProgressGameEl.LiveOdds[0].HomePointSpreadPayout,
+//       awayPointSpreadPayout: inProgressGameEl.LiveOdds[0].AwayPointSpreadPayout,
+//       overUnderTotal:        inProgressGameEl.LiveOdds[0].OverUnder,
+//       overPayout:            inProgressGameEl.LiveOdds[0].OverPayout,
+//       underPayout:           inProgressGameEl.LiveOdds[0].UnderPayout,
+//       channel:               inProgressGameEl.Channel,
+//       quarter:               inProgressGameEl.QuarterDescription,
+//       timeRemaining:         inProgressGameEl.TimeRemaining
+
+//     }); // end getGameDetails for added details inProgress games handler
+
+
   let inProgressGamesResArr = await getInProgressGames();
   let inProgressGamesDataArr = inProgressGamesResArr.filter(gameEl => gameEl.Status === "InProgress");
   inProgressGamesDataArr.forEach(inProgressGameEl => {
@@ -300,12 +331,10 @@ $(document).ready(async () => {
       scoreID:               inProgressGameEl.ScoreId,
       homeTeam:              inProgressGameEl.HomeTeamName,
       homeTeamID:            inProgressGameEl.HomeTeamId,
-      homeTeamScore:         inProgressGameEl.HomeTeamScore,
       awayTeam:              inProgressGameEl.AwayTeamName,
       awayTeamID:            inProgressGameEl.AwayTeamId,
-      awayTeamScore:         inProgressGameEl.awayTeamScore,
-      homeTeamML:            inProgressGameEl.LiveOdds[0].HomeMoneyLine,
-      awayTeamML:            inProgressGameEl.LiveOdds[0].AwayMoneyLine,
+      // homeTeamML:            inProgressGameEl.LiveOdds[0].HomeMoneyLine,
+      // awayTeamML:            inProgressGameEl.LiveOdds[0].AwayMoneyLine,
       homePointSpread:       inProgressGameEl.LiveOdds[0].HomePointSpread,
       awayPointSpread:       inProgressGameEl.LiveOdds[0].AwayPointSpread,
       homePointSpreadPayout: inProgressGameEl.LiveOdds[0].HomePointSpreadPayout,
@@ -314,19 +343,26 @@ $(document).ready(async () => {
       overPayout:            inProgressGameEl.LiveOdds[0].OverPayout,
       underPayout:           inProgressGameEl.LiveOdds[0].UnderPayout    
     });
-  }); // end getInProgressGames handler
+  }); 
+  // end getInProgressGames handler
 
   let gameDetailsResArr2  = await getGameDetails();
   let gameDetailsDataArr2 = gameDetailsResArr2.filter(gameEl => gameEl.Status === "InProgress");
+  console.log(gameDetailsDataArr2);
   gameDetailsDataArr2.forEach(detailsEl => {
     let detailsElScoreID = detailsEl.ScoreID;
     inProgressGamesArr.forEach(gameEl => {
       if (gameEl.scoreID === detailsElScoreID) {
-          gameEl.quarter       =  detailsEl.Quarter,
-          gameEl.timeRemaining =  detailsEl.TimeRemaining
+        gameEl.homeTeamML    = detailsEl.HomeTeamMoneyLine,
+        gameEl.awayTeamML    = detailsEl.AwayTeamMoneyLine,
+        gameEl.homeTeamScore = detailsEl.HomeScore,
+        gameEl.awayTeamScore = detailsEl.AwayScore,
+        gameEl.channel       = detailsEl.Channel,
+        gameEl.quarter       = detailsEl.QuarterDescription,
+        gameEl.timeRemaining = detailsEl.TimeRemaining
       }
     });
-  }); // end getGameDetails for quarter and time remaining for inProgress games handler
+  }); // end getGameDetails for added details inProgress games handler
 
 
   let newsDataArr = await getNews();
@@ -527,10 +563,10 @@ function loadLiveGameCards() {
     liveInfoCon.append(liveInfoRow);
     let homeScore = $("<div>");
     homeScore.addClass("col-4");
-    homeScore.text(gameEl.homeTeamRuns);
+    homeScore.text(gameEl.homeTeamScore);
     let quarter    = $("<div>");
     quarter.addClass("col-8");
-    quarter.text(gameEl.inning);
+    quarter.text(`${gameEl.quarter} (${gameEl.timeRemaining})`);
     liveInfoRow.append(homeScore, quarter);
 
     let liveGameBtn = $("<i>");
@@ -560,7 +596,7 @@ function loadLiveGameCards() {
 
     let awayScore = $("<div>");
     awayScore.addClass("col-4");
-    awayScore.text(gameEl.awayScore);
+    awayScore.text(gameEl.awayTeamScore);
 
     let channel    = $("<div>");
     channel.addClass("col-8");
@@ -574,7 +610,7 @@ function loadLiveGameCards() {
     liveGameAwayRow.append(liveAwayTeamLogo, awayTeamFullName, liveInfoDivAway, emptyDiv);
     liveInfoDivAway.append(liveInfoConAway);
     liveInfoConAway.append(liveInfoRowAway);
-    liveInfoRowAway.append(awayScore,channel);
+    liveInfoRowAway.append(awayScore, channel);
 
     liveGameCard.append(liveGameHomeRow);
     liveGameHomeRow.append(liveHomeTeamLogo, homeTeamFullName, liveInfoDivHome, liveGameBtn);
@@ -585,19 +621,24 @@ loadLiveGameCards();
 
 $(".liveGameModalBtn").on("click", function() {
   let scoreID = $(this).attr("id");
+  console.log(inProgressGamesArr);
   inProgressGamesArr.forEach((gameEl) => {
       if (parseInt(scoreID) === gameEl.scoreID) {
           $("#homeTeamLogoLiveModal").attr("src", gameEl.homeTeamLogo);
           $("#homeTeamSpreadLive").text(gameEl.homePointSpread);
           $("#homeTeamSpreadOddsLive").text(gameEl.homePointSpreadPayout);
-          $("#homeTeamMLLive").text(gameEl.homeTeaML);
+          $("#homeTeamMLLive").text(gameEl.homeTeamML);
+
+          // overUnderTotal:        inProgressGameEl.LiveOdds[0].OverUnder,
+          // overPayout:            inProgressGameEl.LiveOdds[0].OverPayout,
+          // underPayout:           inProgressGameEl.LiveOdds[0].UnderPayout  
 
           // no section for overUNderTotal and overPayout and underPayout **************************
 
           $("#awayTeamLogoLiveModal").attr("src", gameEl.awayTeamLogo);
           $("#awayTeamSpreadLive").text(gameEl.awayPointSpread);
           $("#awayTeamSpreadOddsLive").text(gameEl.awayPointSpreadPayout);
-          $("#awayTeamMLLive").text(gameEl.awayTeaML);
+          $("#awayTeamMLLive").text(gameEl.awayTeamML);
           
       } else return;
   });
