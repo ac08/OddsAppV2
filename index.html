@@ -51,8 +51,25 @@
         <div id="liveGameDiv"></div>
         <div id="completedGameDiv"></div>
 
-        <!-- News Feed -->
-
+    <!-- News Feed -->
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-sm-2">
+                <div id="headlines" class="list-group">
+                    <a id="today" class="list-group-item list-group-item-light list-group-item-action" href="#content-0">Current</a>
+                    <a id="yesterday" class="list-group-item list-group-item-light list-group-item-action" href="#content-1">Yesterday</a>
+                    <a id="twoDaysAgo" class="list-group-item list-group-item-light list-group-item-action" href="#content-2">Catchup</a>
+                </div>                                                     <!-- end headlines list-group, "table of contents "-->
+            </div>                                                         <!-- end col-2 -->
+            <div class="col-sm-10">
+                <div data-spy="scroll" data-target="#headlines" data-offset="0" class="news">
+                    <div id="content-0"></div>
+                    <div id="content-1"></div>
+                    <div id="content-2"></div>
+                </div>                                                     <!-- end spy-->
+            </div>                                                         <!-- end col-10 -->
+        </div>                                                             <!-- end row -->
+    </div>     
 
     <!-- Pre-Game Modal -->
     <div id="pre-game-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="pre-game-modal" aria-hidden="true">
@@ -199,6 +216,7 @@
         </div>                                                                                                      <!-- end live modal dialog div -->
     </div>                                                                                                          <!-- end live modal div -->
     
+    <!-- Begin inert templating -->
     <script id="odds-template" type="text/x-handlebars-template">
         {{#each this}}
           <p class="list-group-item d-flex justify-content-between align-items-center">
@@ -223,7 +241,7 @@
                 <img class='col-1 card-img' src={{homeTeamLogo}} id='homeTeamLogoPre'>
                 <div class='col-4 font-weight-bold'>{{homeTeamFullName}}</div>
                 <div class='col-6'>{{dateTime}}</div>
-                <i class="col-1 preGameModalBtn fas fa-football-ball my-auto" data-toggle="modal" data-target="#pre-game-modal" id="{{scoreID}}"></i>
+                <i class="col-1 preGameModalBtn fas fa-football-ball my-auto" data-toggle="modal" data-target="#pre-game-modal" id={{scoreID}}></i>
             </div>
         </div>
         {{/each}}
@@ -256,7 +274,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-1 liveGameModalBtn fas fa-football-ball my-auto" data-toggle="modal" data-target="#live-game-modal" id="scoreID"></div>
+            <i class="col-1 liveGameModalBtn fas fa-football-ball my-auto" data-toggle="modal" data-target="#live-game-modal" id={{scoreID}}></i>
           </div>
         </div> 
         {{/each}}
