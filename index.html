@@ -17,10 +17,6 @@
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
         crossorigin="anonymous"
     >
-    <link
-        href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
-        rel="stylesheet"
-    >
     <link  
         rel="stylesheet" 
         href="assets/style.css"
@@ -46,32 +42,17 @@
                 </button>
             </div>
             <div class="row mb-1">
-                <div id="SuperBowlWinnerOdds" class="collapse col-12 text-center border mt-4"></div>
+                <div id="SuperBowlWinnerOdds" class="collapse col-12 text-center border"></div>
                 <div id="AFCWinnerOdds" class="collapse col-12 text-center border"></div>
                 <div id="NFCWinnerOdds" class="collapse col-12 text-center border"></div>
             </div>
         </div>
+        <div id="preGameDiv"></div>
+        <div id="liveGameDiv"></div>
+        <div id="completedGameDiv"></div>
 
         <!-- News Feed -->
-        <div class="container my-5">
-            <div class="row">
-                <div class="col-sm-2">
-                    <div id="headlines" class="list-group">
-                        <a id="today" class="list-group-item list-group-item-light list-group-item-action" href="#content-0">Current</a>
-                        <a id="yesterday" class="list-group-item list-group-item-light list-group-item-action" href="#content-1">Yesterday</a>
-                        <a id="twoDaysAgo" class="list-group-item list-group-item-light list-group-item-action" href="#content-2">Catchup</a>
-                    </div>                                                     <!-- end headlines list-group, "table of contents "-->
-                </div>                                                         <!-- end col-2 -->
-                <div class="col-sm-10">
-                    <div data-spy="scroll" data-target="#headlines" data-offset="0" class="news">
-                        <div id="content-0"></div>
-                        <div id="content-1"></div>
-                        <div id="content-2"></div>
-                    </div>                                                     <!-- end spy-->
-                </div>                                                         <!-- end col-10 -->
-            </div>                                                             <!-- end row -->
-        </div>                                                                 <!-- end container -->
-    </div>                                                                     <!-- end of body container-fluid -->
+
 
     <!-- Pre-Game Modal -->
     <div id="pre-game-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="pre-game-modal" aria-hidden="true">
@@ -217,10 +198,97 @@
             </div>                                                                                                  <!-- end live modal content -->
         </div>                                                                                                      <!-- end live modal dialog div -->
     </div>                                                                                                          <!-- end live modal div -->
+    
+    <script id="odds-template" type="text/x-handlebars-template">
+        {{#each this}}
+          <p class="list-group-item d-flex justify-content-between align-items-center">
+              {{teamName}}
+              <span class="badge badge-dark">{{payout}}</span>
+          </p>
+        {{/each}}
+      </script>
+
+    <script id="preGame-template" type="text/x-handlebars-template">
+        {{#each this}}
+        <div class='container-fluid text-center card preGameCard mb-3' id={{scoreID}}>
+            <div class='row card-body'>
+                <img class='col-1 card-img' src={{awayTeamLogo}} id='awayTeamLogoPre'>
+                <div class='col-4 font-weight-bold'>{{awayTeamFullName}}</div>
+                <div class='col-6'>{{stadiumName}} - {{stadiumCity}}, {{stadiumState}}</div>
+                <div class='col-1'>{{channel}}</div>
+      
+            </div>
+            
+            <div class='row card-body'>
+                <img class='col-1 card-img' src={{homeTeamLogo}} id='homeTeamLogoPre'>
+                <div class='col-4 font-weight-bold'>{{homeTeamFullName}}</div>
+                <div class='col-6'>{{dateTime}}</div>
+                <i class="col-1 preGameModalBtn fas fa-football-ball my-auto" data-toggle="modal" data-target="#pre-game-modal" id="{{scoreID}}"></i>
+            </div>
+        </div>
+        {{/each}}
+    </script>
+
+    <script id="liveGame-template" type="text/x-handlebars-template">
+        {{#each this}}
+        <div class='container-fluid text-center card liveGameCard mb-3' id={{scoreID}}>
+          <div class='row card-body'>
+              <img class='col-1 card-img' src={{awayTeamLogo}} id='awayTeamLogoLive'>
+              <div class='col-4 font-weight-bold'>{{awayTeamFullName}}</div>
+              <div class='col-6'>
+                <div class='container-fluid'>
+                  <div class="row">
+                    <div class="col-4">{{awayTeamScore}}</div>
+                    <div class="col-8">{{channel}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-1"></div>
+            </div>
+          <div class='row card-body'>
+            <img class='col-1 card-img' src={{homeTeamLogo}} id='homeTeamLogoLive'>
+            <div class='col-4 font-weight-bold'>{{homeTeamFullName}}</div>
+            <div class='col-6'>
+              <div class='container-fluid'>
+                <div class="row">
+                  <div class="col-4">{{homeTeamScore}}</div>
+                  <div class="col-8">{{quarter}} ({{timeRemaining}})</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-1 liveGameModalBtn fas fa-football-ball my-auto" data-toggle="modal" data-target="#live-game-modal" id="scoreID"></div>
+          </div>
+        </div> 
+        {{/each}}
+      </script>    
+    <script id="completedGame-template" type="text/x-handlebars-template">
+      {{#each this}}
+      <div class='container-fluid card my-3 border completeGameCard' id={{scoreID}}>
+          <div class='row card-body'>
+              <img class='col-1 card-img' src={{awayTeamLogo}} id='awayTeamLogoComplete'>
+              <div class='col-4 font-weight-bold'>{{awayTeamFullName}}</div>
+              <div class='col-2'>{{awayScore}}</div>
+              <div class='col-5' id='awayHeadCoach'>{{awayHeadCoach}} {{#if homeWon}}(L){{else}}(W){{/if}}</div>
+          </div>
+          
+          <div class='row card-body'>
+              <img class='col-1 card-img' src={{homeTeamLogo}} id='homeTeamLogoComplete'>
+              <div class='col-4 font-weight-bold'>{{homeTeamFullName}}</div>
+              <div class='col-2'>{{homeScore}}</div>
+              <div class='col-5' id='homeHeadCoach'>{{homeHeadCoach}} {{#if homeWon}}(W){{else}}(L){{/if}}</div>
+          </div>
+      </div>
+      {{/each}}
+    </script>
+    
+
+    
+    
 
 
     <!-- jQuery first, then Popper.js, then Bootstrap JavaScript, then user logic.js file -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>    
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" integrity="sha512-zT3zHcFYbQwjHdKjCu6OMmETx8fJA9S7E6W7kBeFxultf75OPTYUJigEKX58qgyQMi1m1EgenfjMXlRZG8BXaw==" crossorigin="anonymous"></script>    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>  
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <!-- scrollspy jQuery functionality per Bootstrap documentation -->
@@ -231,7 +299,7 @@
     </script>
     <!-- moment.js library added for date conversions -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js" integrity="sha512-Izh34nqeeR7/nwthfeE0SI3c8uhFSnqxV0sI9TvTcXiFJkMd6fB644O64BRq2P/LA/+7eRvCw4GmLsXksyTHBg==" crossorigin="anonymous"></script>
-    <script src="assets/logic.js"></script>
+    <script src="app.js"></script>
    
 
 
