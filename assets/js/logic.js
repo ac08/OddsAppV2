@@ -118,7 +118,7 @@ const getGameDetails = () => {
   }
 };
 
-// ========================================================================================================================================================
+// ===========================================================================
   
 // getInProgressGames() call
 
@@ -133,12 +133,12 @@ const getInProgressGames = () => {
   }
 };
 
-// ========================================================================================================================================================
+// ===========================================================================
 
 
 $(document).ready(async () => {
-  let afcResArr  = await afcOdds();
-  let afcDataArr = afcResArr[0].BettingMarkets.filter(market => market.BettingBetType === 'AFC Champion');
+  const afcResArr  = await afcOdds();
+  const afcDataArr = afcResArr[0].BettingMarkets.filter((market) => market.BettingBetType === 'AFC Champion');
   afcDataArr[0].BettingOutcomes.filter(sportsbook => {
     if (sportsbook.SportsBook.SportsbookID === 7) {
       afcOddsArr.push({
@@ -148,8 +148,8 @@ $(document).ready(async () => {
     }
   });
 
-  let nfcResArr  = await nfcOdds();
-  let nfcDataArr = nfcResArr[0].BettingMarkets.filter(market => market.BettingBetType === 'NFC Champion');
+  const nfcResArr  = await nfcOdds();
+  const nfcDataArr = nfcResArr[0].BettingMarkets.filter((market) => market.BettingBetType === 'NFC Champion');
   nfcDataArr[0].BettingOutcomes.filter(sportsbook => {
     if (sportsbook.SportsBook.SportsbookID === 7) {
       nfcOddsArr.push({
@@ -159,8 +159,8 @@ $(document).ready(async () => {
     }
   });
 
-  let sbResArr  = await afcOdds();
-  let sbDataArr = sbResArr[0].BettingMarkets.filter(market => market.BettingBetType === 'NFL Championship Winner');
+  const sbResArr  = await afcOdds();
+  const sbDataArr = sbResArr[0].BettingMarkets.filter((market) => market.BettingBetType === 'NFL Championship Winner');
   sbDataArr[0].BettingOutcomes.filter(sportsbook => {
     if (sportsbook.SportsBook.SportsbookID === 7) {
       sbOddsArr.push({
@@ -170,9 +170,9 @@ $(document).ready(async () => {
     }
   });
 
-  let completedGamesResArr = await getCompletedGames();
-  let completedGamesDataArr = completedGamesResArr.filter(gameEl => gameEl.Status === 'Final');
-  completedGamesDataArr.forEach(completedGameEl => {
+  const completedGamesResArr = await getCompletedGames();
+  const completedGamesDataArr = completedGamesResArr.filter((gameEl) => gameEl.Status === 'Final');
+  completedGamesDataArr.forEach((completedGameEl) => {
     let scoreCheck = (completedGameEl.HomeScore > completedGameEl.AwayScore);
     completedGamesArr.push({
       homeWon:               scoreCheck,
@@ -194,9 +194,9 @@ $(document).ready(async () => {
     });
   }); //end getCompletedGames handler
 
-  let scheduledGamesResArr  = await getScheduledGames();
-  let scheduledGamesDataArr = scheduledGamesResArr.filter(gameEl => gameEl.Status === 'Scheduled');
-    scheduledGamesDataArr.forEach(preGameOddsEL => {
+  const scheduledGamesResArr  = await getScheduledGames();
+  const scheduledGamesDataArr = scheduledGamesResArr.filter((gameEl) => gameEl.Status === 'Scheduled');
+    scheduledGamesDataArr.forEach((preGameOddsEL) => {
       scheduledGamesArr.push({
         scoreID:               preGameOddsEL.ScoreId,
         dateTime:              moment(preGameOddsEL.DateTime).format('MMMM Do YYYY, h:mm a'),
@@ -216,11 +216,11 @@ $(document).ready(async () => {
       });
     }); // end getScheduledGamesDetails handler
 
-  let gameDetailsResArr  = await getGameDetails();
-  let gameDetailsDataArr = gameDetailsResArr.filter(gameEl => gameEl.Status === 'Scheduled');
-  gameDetailsDataArr.forEach(gameDetailsEl => {
+  const gameDetailsResArr  = await getGameDetails();
+  const gameDetailsDataArr = gameDetailsResArr.filter((gameEl) => gameEl.Status === 'Scheduled');
+  gameDetailsDataArr.forEach((gameDetailsEl) => {
     let gameDetailsElScoreID = gameDetailsEl.ScoreID;
-    scheduledGamesArr.forEach(gameEl => {
+    scheduledGamesArr.forEach((gameEl) => {
       if (gameEl.scoreID === gameDetailsElScoreID) {
           gameEl.channel       =  gameDetailsEl.Channel,
           gameEl.forecastLow   =  gameDetailsEl.ForecastTempLow,
@@ -233,8 +233,8 @@ $(document).ready(async () => {
     });
   }); // end getGameDetails for stadium and channel information for pre-games handler
 
-  let inProgressGamesResArr = await getInProgressGames();
-  let inProgressGamesDataArr = inProgressGamesResArr.filter(gameEl => gameEl.Status === 'InProgress');
+  const inProgressGamesResArr = await getInProgressGames();
+  const inProgressGamesDataArr = inProgressGamesResArr.filter((gameEl) => gameEl.Status === 'InProgress');
   inProgressGamesDataArr.forEach(inProgressGameEl => {
     inProgressGamesArr.push({
       scoreID:               inProgressGameEl.ScoreId,
@@ -242,8 +242,6 @@ $(document).ready(async () => {
       homeTeamID:            inProgressGameEl.HomeTeamId,
       awayTeam:              inProgressGameEl.AwayTeamName,
       awayTeamID:            inProgressGameEl.AwayTeamId,
-      // homeTeamML:            inProgressGameEl.LiveOdds[0].HomeMoneyLine,
-      // awayTeamML:            inProgressGameEl.LiveOdds[0].AwayMoneyLine,
       homePointSpread:       inProgressGameEl.LiveOdds[0].HomePointSpread,
       awayPointSpread:       inProgressGameEl.LiveOdds[0].AwayPointSpread,
       homePointSpreadPayout: inProgressGameEl.LiveOdds[0].HomePointSpreadPayout,
@@ -255,10 +253,10 @@ $(document).ready(async () => {
   }); 
   // end getInProgressGames handler
 
-  let gameDetailsResArr2  = await getGameDetails();
-  let gameDetailsDataArr2 = gameDetailsResArr2.filter(gameEl => gameEl.Status === 'InProgress');
-  gameDetailsDataArr2.forEach(detailsEl => {
-    let detailsElScoreID = detailsEl.ScoreID;
+  const gameDetailsResArr2  = await getGameDetails();
+  const gameDetailsDataArr2 = gameDetailsResArr2.filter(gameEl => gameEl.Status === 'InProgress');
+  gameDetailsDataArr2.forEach((detailsEl) => {
+    const detailsElScoreID = detailsEl.ScoreID;
     inProgressGamesArr.forEach(gameEl => {
       if (gameEl.scoreID === detailsElScoreID) {
         gameEl.homeTeamML    = detailsEl.HomeTeamMoneyLine,
@@ -273,10 +271,10 @@ $(document).ready(async () => {
   }); // end getGameDetails for added details inProgress games handler
 
 
-  let newsDataArr = await getNews();
+  const newsDataArr = await getNews();
 
   // push news articles from last three days to newsArr
-  for (i = 0; i < 3; i++) {
+  for (let i = 0; i < 3; i++) {
     newsArr.push({
       timeAgo:  newsDataArr[i].TimeAgo,
       headline: newsDataArr[i].Title,
@@ -318,10 +316,10 @@ $(document).ready(async () => {
     buttonEl.insertAfter(storyEl);
   }); // end getNews handler
 
-  let teamDetailsDataArr = await getTeamDetails();
+  const teamDetailsDataArr = await getTeamDetails();
   teamDetailsDataArr.forEach(teamDetailEl => {
-    let teamID = teamDetailEl.TeamID;
-    inProgressGamesArr.forEach(gameEl => {
+    const teamID = teamDetailEl.TeamID;
+    inProgressGamesArr.forEach((gameEl) => {
       if (teamID === gameEl.homeTeamID) {
           gameEl.homeTeamFullName = teamDetailEl.FullName;
           gameEl.homeTeamLogo     = teamDetailEl.WikipediaLogoUrl;
@@ -332,7 +330,7 @@ $(document).ready(async () => {
           gameEl.awayHeadCoach    = teamDetailEl.HeadCoach;
       }
     });
-    completedGamesArr.forEach(gameEl => {
+    completedGamesArr.forEach((gameEl) => {
       if (teamID === gameEl.homeTeamID) {
           gameEl.homeTeamFullName = teamDetailEl.FullName;
           gameEl.homeTeamLogo     = teamDetailEl.WikipediaLogoUrl;
@@ -343,7 +341,7 @@ $(document).ready(async () => {
           gameEl.awayHeadCoach    = teamDetailEl.HeadCoach;
       }
     });
-    scheduledGamesArr.forEach(gameEl => {
+    scheduledGamesArr.forEach((gameEl) => {
       if (teamID === gameEl.homeTeamID) {
         gameEl.homeTeamFullName = teamDetailEl.FullName;
         gameEl.homeTeamLogo     = teamDetailEl.WikipediaLogoUrl;
@@ -356,31 +354,30 @@ $(document).ready(async () => {
     });
   });
 
-  
 
   console.log(scheduledGamesArr);
   console.log(inProgressGamesArr);
   console.log(completedGamesArr);
 
-// ========================================================================================================================================================
-let sbOddsTemplate = $('#odds-template').html();
-let compilesbOdds = Handlebars.compile(sbOddsTemplate);
+// ===========================================================================
+const sbOddsTemplate = $('#odds-template').html();
+const compilesbOdds = Handlebars.compile(sbOddsTemplate);
 $('#SuperBowlWinnerOdds').html(compilesbOdds(sbOddsArr));
 
-let afcOddsTemplate = $('#odds-template').html();
-let compileafcOdds = Handlebars.compile(afcOddsTemplate);
+const afcOddsTemplate = $('#odds-template').html();
+const compileafcOdds = Handlebars.compile(afcOddsTemplate);
 $('#AFCWinnerOdds').html(compileafcOdds(afcOddsArr));
 
-let nfcOddsTemplate = $('#odds-template').html();
-let compilenfcOdds = Handlebars.compile(nfcOddsTemplate);
+const nfcOddsTemplate = $('#odds-template').html();
+const compilenfcOdds = Handlebars.compile(nfcOddsTemplate);
 $('#NFCWinnerOdds').html(compilenfcOdds(nfcOddsArr));
 
-let preGameTemplate = $('#preGame-template').html();
-let compilePreGame = Handlebars.compile(preGameTemplate);
+const preGameTemplate = $('#preGame-template').html();
+const compilePreGame = Handlebars.compile(preGameTemplate);
 $('#preGameDiv').html(compilePreGame(scheduledGamesArr));
 
 $('.preGameModalBtn').on('click', function() {
-  let scoreID = $(this).attr('id');
+  const scoreID = $(this).attr('id');
   scheduledGamesArr.forEach((gameEl) => {
     if (parseInt(scoreID) === gameEl.scoreID) {
       $('#homeTeamLogoPreModal').attr('src', gameEl.homeTeamLogo);
@@ -402,13 +399,13 @@ $('.preGameModalBtn').on('click', function() {
   });
 });
 
-let liveGameTemplate = $('#liveGame-template').html();
-let comppileLiveGame = Handlebars.compile(liveGameTemplate);
+const liveGameTemplate = $('#liveGame-template').html();
+const comppileLiveGame = Handlebars.compile(liveGameTemplate);
 $('#liveGameDiv').html(comppileLiveGame(inProgressGamesArr));
 
 
 $('.liveGameModalBtn').on('click', function() {
-  let scoreID = $(this).attr('id');
+  const scoreID = $(this).attr('id');
   inProgressGamesArr.forEach((gameEl) => {
     if (parseInt(scoreID) === gameEl.scoreID) {
       console.log('match');
@@ -425,14 +422,14 @@ $('.liveGameModalBtn').on('click', function() {
   });
 });
 
-let completeGameTemplate = $('#completedGame-template').html();
-let compileCompleteGame = Handlebars.compile(completeGameTemplate);
+const completeGameTemplate = $('#completedGame-template').html();
+const compileCompleteGame = Handlebars.compile(completeGameTemplate);
 $('#completedGameDiv').html(compileCompleteGame(completedGamesArr));
 
 
 
 
-// ========================================================================================================================================================
+// ===========================================================================
 
 }); // end document.ready() function
 
