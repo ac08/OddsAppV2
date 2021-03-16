@@ -10,6 +10,8 @@
 
 Disclaimer: SportsData.io Free NFL Trial allows access to almost their entire live scores and odds database. However, as a Free Trial, the odds and scores are not accurate, but the outcomes depicted are accurate. For example, in real life, Team A is leading Team B 24-10, the web application here may actually show Team A leading Team B 10-5.
 
+Also, only functional during active NFL season.
+
 ## Demo of the Application
 
 - Demo of tracking live football scores, odds, and news
@@ -24,8 +26,8 @@ https://drive.google.com/file/d/1SDG9B7WT6QDviuaGbkf-veBBZwzU10fR/view?usp=shari
 
 - The URL of the deployed application
 
-https://ac08.github.io/OddsAppV2/
+https://andrewcircelli.github.io/AnyGivenSunday/
 
 - The URL of the GitHub repository
 
-https://github.com/ac08/OddsAppV2
+https://github.com/andrewcircelli/AnyGivenSunday
